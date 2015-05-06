@@ -28,14 +28,6 @@ var github = new GithubApi({
 
 
 
-// STATIC FILE SERVING
-// =============================================================================
-
-// Setup static file serving
-app.use('/assets', express.static('assets'));
-
-
-
 // ROUTING SETUP
 // =============================================================================
 
@@ -45,11 +37,19 @@ var router = express.Router();
 // Register the path prefix for all of the router's routes
 app.use('/api', router);
 
-// Middleware to use for all requests
+// Middleware to use for all requests that use the router
 router.use(function(req, res, next) {
     console.log('Processing request for path: ' + req.path);
     next(); // make sure we go to the next routes and don't stop here
 });
+
+
+
+// STATIC FILE SERVING
+// =============================================================================
+
+// Setup static file serving
+app.use('/assets', express.static('assets'));
 
 
 
@@ -72,17 +72,18 @@ router.get('/', function(req, res) {
 });
 
 // User/repository lookup via Github's API
-router.route('/github/user/:username/repository/:repo_name').
+router.route('/github/user/:repo_owner/repository/:repo_name').
 	get(function(req, res) {
-		// Get the username and repo name from this route's path
-		var username = req.params.username;
-		var repoName = req.params.repo_name;
+		// Get the repo name and owner from this route's path
+		var	repo,
+			repoName = req.params.repo_name,
+			repoOwner = req.params.repo_owner;
 
 		// Fetch the user/repository details
-		var repo = github.getRepo(username, repoName);
-		repo.show(function(err, repo) {
+		repo = github.getRepo(repoOwner, repoName);
+		repo.show(function(err, repoDetails) {
 			if(err) {
-				console.log('ERROR: username/repository combination does not exist');
+				console.log('ERROR: repository owner/name combination does not exist');
 
 				// Set the HTTP status code
 				res.status(err.request.status);
@@ -92,8 +93,16 @@ router.route('/github/user/:username/repository/:repo_name').
 				return;
 			}
 
-			// Send the successfully-fetched data
-			res.json(repo);
+			// Send only the relevant parts of the successfully-fetched data
+			res.json({
+				description : repoDetails.description,
+				language : repoDetails.language,
+				lastUpdated : repoDetails.lastUpdated,
+				name : repoDetails.name,
+				owner : repoDetails.owner.login,
+				subscribers : repoDetails.subscribers,
+				url : repoDetails.url
+			});
 		});
 	});
 
