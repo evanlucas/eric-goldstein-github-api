@@ -9,9 +9,9 @@ var dbConfig = {
 	client: 'postgres',
 	connection: {
 		host: 'localhost',
-		user: 'eric',
-		password: 'ericgold',
-		database: 'eric',
+		user: process.env.DB_USER,
+		password: process.env.DB_PASS,
+		database: process.env.DB,
 		charset: 'utf8'
 	}
 };
