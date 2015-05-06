@@ -1,0 +1,14 @@
+h3 {
+	margin-top: 3em;
+}
+
+
+.pre {
+	font-family: monospace;
+	white-space: pre;
+	font-weight: bold;
+}
+
+div.pre {
+	margin: 1em 0;
+}

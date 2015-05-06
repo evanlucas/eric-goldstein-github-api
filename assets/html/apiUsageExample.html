@@ -1,9 +1,46 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Test Page</title>
+		<title>GitHub API Client Plugin</title>
+		<meta charset="utf-8"/>
+		<link rel="stylesheet" type="text/css" href="/assets/css/api-usage-example.css" />
 	</head>
 	<body>
-		<h1>Test Page</h1>
+		<h1>GitHub API Server &amp; Client Plugin</h1>
+		<p>
+			This API is RESTful and works via only a single route and HTTP verb:
+			<div class="pre">GET /api/github/user/:repo_owner/repository/:repo_name</div>
+			where <span class="pre">:repo_owner</span> corresponds to the repository owner's
+			username and <span class="pre">:repo_name</span> corresponds to the name of the
+			repository
+		</p>
+		<p>
+			You can view the live demo here:
+			<a href="/assets/html/githubTest.html">/assets/html/githubTest.html</a>
+		</p>
+
+		<h3>Usage Example</h3>
+		<p>
+			The GitHub repository used to store the code for this test is located here:
+			<a href="https://github.com/mangs/eric-goldstein-github-api">https://github.com/mangs/eric-goldstein-github-api</a>
+		</p>
+		<p>
+			By visiting that page, we know that the repository owner's username is
+			<span class="pre">mangs</span> and the name of the repository is
+			<span class="pre">eric-goldstein-github-api</span>. Thus, we'd fetch that repository's
+			details via the following request:
+			<div class="pre">GET /api/github/user/mangs/repository/eric-goldstein-github-api</div>
+		</p>
+		<p>
+			The server should return JSON similar to the following:
+			<div class="pre">{
+  "description": "Eric Goldstein's Github API Take Home Project.",
+  "language": "JavaScript",
+  "name": "eric-goldstein-github-api",
+  "owner": "mangs",
+  "url": "https://api.github.com/repos/mangs/eric-goldstein-github-api"
+}
+			</div>
+		</p>
 	</body>
 </html>
