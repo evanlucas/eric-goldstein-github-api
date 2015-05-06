@@ -4,11 +4,27 @@
 // BASE SETUP
 // =============================================================================
 
+// Database configuration
+var dbConfig = {
+	client: 'postgres',
+	connection: {
+		host: 'localhost',
+		user: 'eric',
+		password: 'ericgold',
+		database: 'eric',
+		charset: 'utf8'
+	}
+};
+
 // Import modules
 var bodyParser = require('body-parser');
+var knex = require('knex')(dbConfig);
+var bookshelf = require('bookshelf')(knex);
 var express    = require('express');
 var fs         = require('fs');
 var GithubApi  = require('github-api');
+
+// app.set('bookshelf', bookshelf);
 
 // Use express to serve this app
 var app = express();                 // define our app using express
@@ -25,6 +41,9 @@ var github = new GithubApi({
   token: process.env.GITHUB_TOKEN,
   auth: "oauth"
 });
+
+// Allow caching of GitHub responses in our Postgres database
+var CachedResponse = bookshelf.Model.extend({tableName : 'github_cache'});
 
 
 
@@ -77,33 +96,69 @@ router.route('/github/user/:repo_owner/repository/:repo_name').
 		// Get the repo name and owner from this route's path
 		var	repo,
 			repoName = req.params.repo_name,
-			repoOwner = req.params.repo_owner;
+			repoOwner = req.params.repo_owner,
+			responseSent = false;
 
-		// Fetch the user/repository details
-		repo = github.getRepo(repoOwner, repoName);
-		repo.show(function(err, repoDetails) {
-			if(err) {
-				console.log('ERROR: repository owner/name combination does not exist');
+		// Check the database cache for valid results
+		(new CachedResponse()).
+			query(function(queryBuilder) {
+				queryBuilder.
+					select('data').
+					where('repo_owner', '=', repoOwner).
+					andWhere('repo_name', '=', repoName).
+					andWhere(knex.raw("ts > now() - interval '1 hour'"));
+			}).
+			fetch().
+			then(function(result) {
+				if(result && result.attributes && result.attributes.data) {
+					responseSent = true;
+					res.json(result.attributes.data);
+				}
+			}).
+			then(function() {
+				if(responseSent) {
+					return;
+				}
 
-				// Set the HTTP status code
-				res.status(err.request.status);
+				// Fetch the user/repository details
+				repo = github.getRepo(repoOwner, repoName);
+				repo.show(function(err, repoDetails) {
+					if(err) {
+						console.log('ERROR: repository owner/name combination does not exist');
 
-				// Send the error object back to the client as JSON
-				res.json(err);
-				return;
-			}
+						// Set the HTTP status code
+						res.status(err.request.status);
 
-			// Send only the relevant parts of the successfully-fetched data
-			res.json({
-				description : repoDetails.description,
-				language : repoDetails.language,
-				lastUpdated : repoDetails.lastUpdated,
-				name : repoDetails.name,
-				owner : repoDetails.owner.login,
-				subscribers : repoDetails.subscribers,
-				url : repoDetails.url
+						// Send the error object back to the client as JSON
+						res.json(err);
+						return;
+					}
+
+					// Build the JSON response
+					var jsonResponse = {
+						description : repoDetails.description,
+						language : repoDetails.language,
+						lastUpdated : repoDetails.lastUpdated,
+						name : repoDetails.name,
+						owner : repoDetails.owner.login,
+						subscribers : repoDetails.subscribers,
+						url : repoDetails.url
+					};
+
+					// Add these results to the database cache
+					var model = new CachedResponse({
+						repo_owner : repoDetails.owner.login,
+						repo_name : repoDetails.name,
+						ts : 'now()',
+						data : jsonResponse
+					});
+					model.idAttribute = null;
+					model.save();
+
+					// Send only the relevant parts of the successfully-fetched data
+					res.json(jsonResponse);
+				});
 			});
-		});
 	});
 
 
