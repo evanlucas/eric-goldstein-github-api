@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>GitHub API Client Plugin</title>
-		<meta charset="utf-8"/>
+		<meta charset="utf-8" />
 		<link rel="stylesheet" type="text/css" href="/assets/css/api-usage-example.css" />
 	</head>
 	<body>
@@ -14,12 +14,35 @@
 			username and <span class="pre">:repo_name</span> corresponds to the name of the
 			repository
 		</p>
+
+		<h3>Live Demo</h3>
 		<p>
 			You can view the live demo here:
 			<a href="/assets/html/githubTest.html">/assets/html/githubTest.html</a>
 		</p>
 
-		<h3>Usage Example</h3>
+		<h3>Getting the Node.js Server Running</h3>
+		<p>
+			This Node.js application server relies on the use of an environment variable to notify
+			the application of the OAuth token to use to connect to GitHub's API. Follow these steps
+			to get it working:
+			<ol>
+				<li>Login to your GitHub account on github.com</li>
+				<li>
+					Create a new "Personal Access Token" here:
+					<a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a>
+				</li>
+				<li>Copy your Personal Access Token string to your clipboard</li>
+				<li>Clone the Git repository onto your local machine</li>
+				<li>Navigate to the root of the cloned repository's directory</li>
+				<li>
+					Execute the following Bash command:
+					<span class="pre">GITHUB_TOKEN={personal_access_token} node server.js</span>
+				</li>
+			</ol>
+		</p>
+
+		<h3>API Usage Example</h3>
 		<p>
 			The GitHub repository used to store the code for this test is located here:
 			<a href="https://github.com/mangs/eric-goldstein-github-api">https://github.com/mangs/eric-goldstein-github-api</a>
