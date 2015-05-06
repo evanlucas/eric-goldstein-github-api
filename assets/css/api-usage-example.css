@@ -1,14 +1,12 @@
 h3 {
-	margin-top: 3em;
-}
-
+  margin-top: 3em; }
 
 .pre {
-	font-family: monospace;
-	white-space: pre;
-	font-weight: bold;
-}
+  font-family: monospace;
+  white-space: pre;
+  font-weight: bold; }
 
 div.pre {
-	margin: 1em 0;
-}
+  margin: 1em 0; }
+
+/*# sourceMappingURL=api-usage-example.css.map */

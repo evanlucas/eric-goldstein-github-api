@@ -1,0 +1,47 @@
+.github-repos > form {
+	margin-bottom: 2em;
+}
+
+.github-repos > form > label {
+	margin-right: 1em;
+}
+
+.github-repos > .list > article {
+	background-color: #EEE;
+	box-shadow: 0 0 0.5em black;
+	display: table;
+	margin: 1em;
+	position: relative;
+}
+
+.github-repos article > .delete {
+	background-color: red;
+	color: white;
+	cursor: pointer;
+	font-family: sans-serif;
+	font-weight: bold;
+	padding: 0.1em 1em;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+
+
+/*** MEDIA QUERIES ***/
+
+@media all and (max-width: 700px) {
+	.github-repos > form > label {
+		display: block;
+	}
+
+	.github-repos > .list > article {
+		display: block;
+	}
+
+	.github-repos article > .delete {
+		background-color: orange;
+		color: black;
+		padding: 0.2em 2em;
+	}
+}
