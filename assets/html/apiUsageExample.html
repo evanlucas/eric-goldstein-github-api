@@ -15,6 +15,12 @@
 			repository
 		</p>
 
+		<h3>GitHub Repository</h3>
+		<p>
+			The GitHub repository used to store the code for this test is located here:
+			<a href="https://github.com/mangs/eric-goldstein-github-api">https://github.com/mangs/eric-goldstein-github-api</a>
+		</p>
+
 		<h3>Live Demo</h3>
 		<p>
 			You can view the live demo here:
@@ -40,19 +46,27 @@
 					<span class="pre">npm install</span>
 				</li>
 				<li>
+					Using the <span class="pre">psql</span> console command, login to your running
+					Postgres instance
+				</li>
+				<li>
+					Create the desired database by executing the following command:
+					<span class="pre">create database {desired_database_name};</span>
+				</li>
+				<li>Exit the <span class="pre">psql</span> tool</li>
+				<li>
+					Import the proper database schema by executing the following command:
+					<span class="pre">psql {database_name} < database/dbdump.sql</span>
+				<li>
 					To start the server, execute the following Bash command:
-					<span class="pre">GITHUB_TOKEN={personal_access_token} node server.js</span>
+					<div class="pre">DB={database_name} DB_USER={database_user} DB_PASS={database_password} GITHUB_TOKEN={personal_access_token} node server.js</div>
 				</li>
 			</ol>
 		</p>
 
 		<h3>API Usage Example</h3>
 		<p>
-			The GitHub repository used to store the code for this test is located here:
-			<a href="https://github.com/mangs/eric-goldstein-github-api">https://github.com/mangs/eric-goldstein-github-api</a>
-		</p>
-		<p>
-			By visiting that page, we know that the repository owner's username is
+			By visiting the GitHub repository page listed above, we know that the repository owner's username is
 			<span class="pre">mangs</span> and the name of the repository is
 			<span class="pre">eric-goldstein-github-api</span>. Thus, we'd fetch that repository's
 			details via the following request:
