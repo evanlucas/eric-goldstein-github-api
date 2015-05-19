@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,EAAG;EACF,UAAU,EAAE,GAAG;;AAIhB,IAAK;EACJ,WAAW,EAAE,SAAS;EACtB,WAAW,EAAE,GAAG;EAChB,WAAW,EAAE,IAAI;;AAGlB,OAAQ;EACP,MAAM,EAAE,KAAK",
+"sources": ["sass/api-usage-example.scss"],
+"names": [],
+"file": "api-usage-example.css"
+}

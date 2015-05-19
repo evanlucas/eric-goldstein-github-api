@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>GitHub API Client Plugin</title>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="/assets/css/api-usage-example.css" />
+	</head>
+	<body>
+		<h1>GitHub API Server &amp; Client Plugin</h1>
+		<p>
+			This API is RESTful and works via only a single route and HTTP verb:
+			<div class="pre">GET /api/github/user/:repo_owner/repository/:repo_name</div>
+			where <span class="pre">:repo_owner</span> corresponds to the repository owner's
+			username and <span class="pre">:repo_name</span> corresponds to the name of the
+			repository
+		</p>
+
+		<h3>GitHub Repository</h3>
+		<p>
+			The GitHub repository used to store the code for this test is located here:
+			<a href="https://github.com/mangs/eric-goldstein-github-api">https://github.com/mangs/eric-goldstein-github-api</a>
+		</p>
+
+		<h3>Live Demo</h3>
+		<p>
+			You can view the live demo here:
+			<a href="/assets/html/githubTest.html">/assets/html/githubTest.html</a>
+		</p>
+
+		<h3>Getting the Node.js Server Running</h3>
+		<p>
+			This Node.js application server relies on the use of an environment variable to notify
+			the application of the OAuth token to use to connect to GitHub's API. Follow these steps
+			to get it working:
+			<ol>
+				<li>Login to your GitHub account on github.com</li>
+				<li>
+					Create a new "Personal Access Token" here:
+					<a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a>
+				</li>
+				<li>Copy your Personal Access Token string to your clipboard</li>
+				<li>Clone the Git repository onto your local machine</li>
+				<li>Navigate to the root of the cloned repository's directory</li>
+				<li>
+					Install all necessary Node.js modules with the following command:
+					<span class="pre">npm install</span>
+				</li>
+				<li>
+					Using the <span class="pre">psql</span> console command, login to your running
+					Postgres instance
+				</li>
+				<li>
+					Create the desired database by executing the following command:
+					<span class="pre">create database {desired_database_name};</span>
+				</li>
+				<li>Exit the <span class="pre">psql</span> tool</li>
+				<li>
+					Import the proper database schema by executing the following command:
+					<span class="pre">psql {database_name} < database/dbdump.sql</span>
+				<li>
+					To start the server, execute the following Bash command:
+					<div class="pre">DB={database_name} DB_USER={database_user} DB_PASS={database_password} GITHUB_TOKEN={personal_access_token} node server.js</div>
+				</li>
+			</ol>
+		</p>
+
+		<h3>API Usage Example</h3>
+		<p>
+			By visiting the GitHub repository page listed above, we know that the repository owner's username is
+			<span class="pre">mangs</span> and the name of the repository is
+			<span class="pre">eric-goldstein-github-api</span>. Thus, we'd fetch that repository's
+			details via the following request:
+			<div class="pre">GET /api/github/user/mangs/repository/eric-goldstein-github-api</div>
+		</p>
+		<p>
+			The server should return JSON similar to the following:
+			<div class="pre">{
+  "description": "Eric Goldstein's Github API Take Home Project.",
+  "language": "JavaScript",
+  "name": "eric-goldstein-github-api",
+  "owner": "mangs",
+  "url": "https://api.github.com/repos/mangs/eric-goldstein-github-api"
+}
+			</div>
+		</p>
+	</body>
+</html>
